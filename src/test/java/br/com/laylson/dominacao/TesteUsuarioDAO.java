@@ -7,12 +7,12 @@ import br.com.laylson.dominacao.persistencia.jdbc.UsuarioDAO;
 
 public class TesteUsuarioDAO {
 
-	private static Usuario autenticar;
+	//private static Usuario autenticar;
 	public static void main(String[] args) {
 		//testeCadastrar();
 		//testeSalvar();
 		//testeBuscarTodos();
-		testeAutenticar();
+		//testeAutenticar();
 	}
 	private static void testeAutenticar() {
 		UsuarioDAO usuarioDAO = new UsuarioDAO();

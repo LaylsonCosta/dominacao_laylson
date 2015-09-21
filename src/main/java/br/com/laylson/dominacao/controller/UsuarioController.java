@@ -3,6 +3,8 @@ package br.com.laylson.dominacao.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -35,14 +37,45 @@ public class UsuarioController extends HttpServlet {
 			UsuarioDAO usuDAO = new UsuarioDAO();
 			usuDAO.deletar(usu);
 
-			resp.getWriter().print("Ecluiído com sucesso!");
+			resp.sendRedirect("usucontroller.do?acao=lis");
+		
+		
 		} else if (acao.equals("lis")) {
 			//Implementar a lista
 			UsuarioDAO usuDAO = new UsuarioDAO();
 			List<Usuario> lista = usuDAO.buscarTodos();
-			for(Usuario u: lista){
-					resp.getWriter().print(u.getNome() + "<br>");
-			}
+			
+			//preenchendo uma 'gaveta' do request com uma lista em forma de objeto
+			//rotulando essa 'gaveta' como 'lista' 
+			req.setAttribute("lista", lista);
+			
+			//encaminhando o request preenchido para o JSP
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/listausu.jsp");
+			dispatcher.forward(req, resp);
+		
+		
+		}else if (acao.equals("alt")){
+			
+			String id = req.getParameter("id");
+			UsuarioDAO usuarioDAO = new UsuarioDAO();
+			Usuario usuario = usuarioDAO.buscarPorId(Integer.parseInt(id));
+			
+			req.setAttribute("usu", usuario);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/frmUsuario.jsp");
+			dispatcher.forward(req, resp);
+			
+			
+		}else if(acao.equals("cad")){
+			
+			Usuario usuario = new Usuario();
+			usuario.setId(0);
+			usuario.setNome("");
+			usuario.setLogin("");
+			usuario.setSenha("");
+			
+			req.setAttribute("usu", usuario);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("WEB-INF/frmUsuario.jsp");
+			dispatcher.forward(req, resp);
 		}
 	}
 
@@ -64,13 +97,13 @@ public class UsuarioController extends HttpServlet {
 		UsuarioDAO usuDAO = new UsuarioDAO();
 		usuDAO.salvar(usu);
 
-		resp.getWriter().print("Sucesso!");
+		resp.sendRedirect("usucontroller.do?acao=lis");
 		// System.out.println("Cadastrado com sucesso!!");
 	}
 
 	@Override
 	public void init() throws ServletException {
-		// TODO Auto-generated method stub
+		
 		System.out.println("init...");
 		super.init();
 	}

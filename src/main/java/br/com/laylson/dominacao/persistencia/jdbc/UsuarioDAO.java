@@ -75,7 +75,7 @@ public class UsuarioDAO {
 	}
 		
 	public void salvar(Usuario usu){
-		if (usu.getId()!=null){
+		if (usu.getId()!=null && usu.getId()!=0){
 			alterar(usu);
 		}else {
 			cadastrar(usu);
@@ -121,7 +121,7 @@ public class UsuarioDAO {
 	
 	public java.util.List<Usuario> buscarTodos(){
 		
-		String sql = "select * from usuario";
+		String sql = "select * from usuario order by id";
 		java.util.List<Usuario> lista = new ArrayList<Usuario>();
 		try(PreparedStatement pst = con.prepareStatement(sql)){
 			
